@@ -2,6 +2,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 import sqlite3
 from tkinter import messagebox
+import re
 
 
 class Sign_Up:
@@ -51,16 +52,26 @@ class Sign_Up:
           self.password.place(x=350, y=280)
           self.password_entry = Entry(self.signup, highlightthickness=0, relief=FLAT, font=('Time', 14, 'bold'))
           self.password_entry.place(x=410, y=310, width=260)
+          
+          # ===== Request things in Password =====
+          self.things_frame= Frame(self.signup,width=160,height=44)
+          self.things_frame.place(x=410, y=335)
+          self.letters = Label(self.things_frame, text="・At least 8 letters.",font=('Time',11))
+          self.letters.grid(row=0,sticky='W')
+          self.number = Label(self.things_frame, text="・A number.", font=('Time', 11))
+          self.number.grid(row=1,sticky='W')
+          self.capital_letter = Label(self.things_frame, text="・A capital letter.", font=('Time',11))
+          self.capital_letter.grid(row=2,sticky='W')
 
           # ===== Sign Up Button =====
           self.signup_button = Button(self.signup, text='Sign Up', command=self.sign_up)
-          self.signup_button.place(x=500, y=350)
+          self.signup_button.place(x=500, y=400)
 
           # ===== If you have an account already =====
           self.account = Label(self.signup, pady=7, text='If you have an account already?', font=('Time', 11, 'underline'))
-          self.account.place(x=400, y=400)
+          self.account.place(x=400, y=450)
           self.account = Button(self.signup, text='Sign In', border=0, command=self.go_back)
-          self.account.place(x=580, y=400)
+          self.account.place(x=580, y=450)
 
           # ===== Database =====
           # Create a database or connect to the exist one
@@ -91,6 +102,12 @@ class Sign_Up:
                messagebox.showinfo('Sign Up',"Sorry, can't sign up make sure all fields are complete!", icon="warning")
           elif username == "admin":
                messagebox.showinfo('Sign Up', "Invalid!", icon="warning")
+          elif len(password) < 8:
+               messagebox.showinfo('Sign Up','Make sure your password is at least 8 letters.',icon='warning')
+          elif re.search('[0-9]',password) is None:
+               messagebox.showinfo('Sign Up','Make sure your password has a number in it.',icon='warning')
+          elif re.search('[A-Z]',password) is None:
+               messagebox.showinfo('Sign Up','Make sure your password has a capital letter in it.',icon='warning')
           else:
                try:
                     # Create a database or connect to the exist one

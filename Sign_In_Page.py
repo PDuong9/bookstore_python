@@ -69,23 +69,27 @@ class Sign_In:
                messagebox.showinfo('Sign In','Username or Password cannot be empty!', icon="warning")
           else:
                while True:
-                    data = sqlite3.connect('users_data.db')
-                    c = data.cursor()
-                    c.execute('SELECT * from USERS where USERNAME ="'+str(username)+'"')
-                    row = c.fetchall()
-                    if username == 'admin' and password == 'admin':
-                         self.username_entry.delete(0,END)
-                         self.password_entry.delete(0,END)
-                         print('Admin Login!')
-                         Admin_Page(self.window)
-                    elif row[0][3] == username and row[0][4] == password:
-                         self.username_entry.delete(0,END)
-                         self.password_entry.delete(0,END)
-                         print('Users Login!')
-                         User_Page(self.window)
-                    else:
-                         messagebox.showinfo('Sign In', 'Username or Password Incorrect!', icon="warning")
-                    break
+                    try:
+                         data = sqlite3.connect('users_data.db')
+                         c = data.cursor()
+                         c.execute('SELECT * from USERS where USERNAME ="'+str(username)+'"')
+                         row = c.fetchall()
+                         if username == 'admin' and password == 'admin':
+                              self.username_entry.delete(0,END)
+                              self.password_entry.delete(0,END)
+                              print('Admin Login!')
+                              Admin_Page(self.window)
+                         elif row[0][3] == username and row[0][4] == password:
+                              self.username_entry.delete(0,END)
+                              self.password_entry.delete(0,END)
+                              print('Users Login!')
+                              User_Page(self.window)
+                         else:
+                              messagebox.showinfo('Sign In', 'Username or Password Incorrect!', icon="warning")
+                         break
+                    except Exception:
+                         messagebox.showinfo('Sign In', "Your account doesn't exist!", icon="warning")
+                         break
 
      # Forgot Password Function
      def forgot(self):
